@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+<!-- Latest compiled and minified CSS -->
+
+<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+<link rel="stylesheet" type="text/css" href="css/style.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="http://d3js.org/topojson.v1.min.js"></script>
+  <script src="https://d3js.org/d3-queue.v3.min.js"></script>
+  <script src="js/radarchart.js"></script>
+  <!-- <script src="js/mmresults.js"></script> -->
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  <meta charset="utf-8">
+<meta name="viewport" content="user-scalable=0">
+  <style>
+
+/*    body {
+      background-color: white;
+      font-family: Roboto, Helvetica;
+    }*/
+  .controls {
+  position: absolute;
+  left: 35px;
+  top: 35px;
+  display: grid;
+  grid-gap: 5px;
+}
+.button {
+  width: 30px;
+  height: 30px;
+  font-size: 10pt;
+  font-weight: bold;
+  display:grid;
+  border-radius:50% !important;
+  background: rgba(240, 240, 240, 0.8);
+  color: darkgrey;
+  border: 1px solid #aaaaaa;
+  user-select: none;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+.button-mobile {
+  width: 80px;
+  height: 80px;
+  font-size: 30pt;
+  font-weight: bold;
+  display:grid;
+  border-radius:50% !important;
+  background: rgba(240, 240, 240, 0.8);
+  color: darkgrey;
+  border: 1px solid #aaaaaa;
+  user-select: none;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+button:active {
+  background: rgba(200, 200, 200, 0.8);
+}
+button:focus {
+  outline: 0;
+}
+    .read-desktop {
+      font-size: 11pt;
+    }
+    .read-mobile {
+      font-size: 24pt;
+    }
+    .comp-ab-mobile {
+      margin-left: 10px;
+    }
+    .viz-window {
+      border: solid 0px red !important;
+      padding: 0px 0px 0px 0px;
+      margin: 0px 0px 0px 0px;
+      overflow: hidden; /* For browsers that can't do overflow-y */
+      overflow-y: hidden; /* Controls overflow on the y-axis */
+      overflow-x: hidden; /* Controls overflow on the y-axis */
+    }
+    .svg-container {
+      display:inline !important;
+    }
+    .no-touch {
+      touch-action: none;
+    }
+    svg {
+      border: 2px solid black;
+      background-color: #95AFCF;
+    }
+    #relA {
+      color:#a6611a;
+      display:none;
+      border: solid 1px white;
+    }
+    #relB {
+      color:#018571;
+      display:none;
+      border: solid 1px white;
+    }
+    #compAB {
+      font-weight: bold;
+      display:none;
+      border: solid 1px white;
+    }
+    .rank-label-row {
+      background-color:#f5f5f5;
+      display:none;
+      border: solid 2px white;
+      font-weight: bold;
+    }
+    .instruction-row {
+      color:#777777;
+      font-weight: bold;
+      padding-left: 5px;
+      padding-right: 5px;
+    }
+    .rank-a-row {
+      background-color:#d8b365;
+      display:none;
+      border: solid 1px white;
+      font-weight: bold;
+    }
+    .rank-b-row {
+      background-color:#5ab4ac;
+      display:none;
+      border: solid 1px white;
+      font-weight: bold;
+    }
+    .rank-label {
+      border: solid 1px white;
+      height: 60px;
+      text-align: center;
+      font-weight: bold;
+      /*display: flex;*/
+      align-items: center;
+    }
+    .rank-table-label {
+      border: solid 1px white;
+      text-align: center;
+      height: 60px;
+      /*display: flex;*/
+      align-items: center;
+    }
+    .rank-table-label-mobile {
+      border: solid 1px white;
+      text-align: center;
+      height: 100px;
+      /*display: flex;*/
+      align-items: center;
+    }
+    .rank-a-label {
+      border: solid 1px white;
+      text-align: center;
+      height: 60px;
+      /*display: flex;*/
+      align-items: center;
+    }
+    .rank-a-name {
+      border: solid 1px white;
+      text-align: center;
+      height: 60px;
+      /*display: flex;*/
+      align-items: center;
+    }
+    .rank-a-name-mobile {
+      border: solid 1px white;
+      text-align: center;
+      height: 100px;
+      /*display: flex;*/
+      align-items: center;
+    }
+    .rank-b-label {
+      border: solid 1px white;
+      text-align: center;
+      height: 60px;
+      /*display: flex;*/
+      align-items: center;
+    }
+    .rank-b-name {
+      border: solid 1px white;
+      text-align: center;
+      height: 60px;
+      /*display: flex;*/
+      align-items: center;
+    }
+    .rank-b-name-mobile {
+      border: solid 1px white;
+      text-align: center;
+      height: 100px;
+      /*display: flex;*/
+      align-items: center;
+    }
+    .selected {
+    }
+    .selectedA {
+      fill: #d8b365 !important;
+    }
+    .selectedB {
+      fill: #5ab4ac !important;
+    }
+
+    .boundary {
+      fill: #9EB7D8;
+      stroke: #858585;
+      stroke-width: 1px; 
+    }
+
+    .boundary-selectable {
+      fill: #f5f5f5;
+      stroke: #858585;
+      stroke-width: 1px; 
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    div.tooltip {
+      color: #222; 
+      background: #fff; 
+      border-radius: 3px; 
+      box-shadow: 0px 0px 2px 0px #a6a6a6; 
+      padding: .2em; 
+      text-shadow: #f5f5f5 0 1px 0;
+      opacity: 0.9; 
+      position: absolute;
+      font-family: Roboto,Fira+Sans,Arial,Verdana,Helvetica;
+      font-size: 12px;
+    }
+
+    div.radartooltip {
+      color: #222; 
+      background: #fff; 
+      border-radius: 3px; 
+      box-shadow: 0px 0px 2px 0px #a6a6a6; 
+      padding: .2em; 
+      text-shadow: #f5f5f5 0 1px 0;
+      opacity: 0.9; 
+      position: absolute;
+      font-family: Roboto,Fira+Sans,Arial,Verdana,Helvetica;
+      font-size: 12px;
+    }
+#overlay {
+    position: fixed; /* Sit on top of the page content */
+    display: none; /* Hidden by default */
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    top: 0; 
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 10px;
+    background-color: rgba(255,255,255,1); /* White background with no opacity */
+    z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+    cursor: pointer; /* Add a pointer on hover */
+    font-family: Fira+Sans,Arial,Helvetica;
+}
+
+
+@media all and (min-width: 1001px) { /* screen size until 1200px */
+  .overlay-head {
+      font-size: 24px;
+      font-weight: bold;
+  }
+  .overlay-main {
+      font-size: 18px;
+  }
+}
+@media all and (max-width: 1000px) { /* screen size until 500px */
+  .overlay-head {
+      font-size: 5vw;
+      font-weight: bold;
+  }
+  .overlay-main {
+      font-size: 4vw;
+  }
+    }
+
+  </style>
+
+</head>
+
+<body>
+  <div class="modal fade" id="alertModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title overlay-head">Selection Max</h4>
+        </div>
+        <div class="modal-body overlay-main">
+          <p>You may compare up to two countries at a time. Please click a selected country to unselect it, or click the reset button (❌) to unselect all selected countries.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default overlay-main" data-dismiss="modal">OK</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+
+<div id="overlay">
+  <div class="row">
+    <div class="col-md-12 overlay-head">
+      Welcome to the Moral Machine Results Visualizer
+    </div>
+  </div>
+  <div class="row overlay-main">
+    <div class="col-md-12">
+      <p><img src="images/logo_dark_vertical.png" width="90px" style="float:left;padding:10px;"/> <a href="http://moralmachine.mit.edu" target="_blank">The Moral Machine &#x1F5D7;</a> is a platform for gathering a human perspective on moral decisions made by machine intelligence, such as self-driving cars. It was deployed on June 23rd 2016.</p><p> Since then, millions of users from 233 countries and territories contributed over 40 million decisions on the moral dilemmas faced by self-driving cars having to choose between victims in an unavoidable crash.</p><p>We observed significant differences in the way people made decisions in different countries. More specifically, in the importance they gave to nine factors, such as gender or age of the victims.</p><p>This tool will help you visually explore and compare the preferences of people in different countries.</p>
+    </div>
+  </div>
+  <div class="row overlay-main">
+    <div class="col-md-12"><br/>
+      Please enter the password to continue.
+    </div>
+  </div>
+  <div class="row overlay-main">
+    <div class="col-md-12">
+      <input id="epass" type="password" length="15"/>
+      <button id="btnpass" type="button" class="btn btn-primary overlay-main">Submit</button>
+    </div>
+  </div>
+  <div class="row">
+  <br/>
+  </div>
+  <div class="row">
+    <div class="col-md-12" align="center">
+      <a href="http://scalable.media.mit.edu" target="_blank"><img height="150px" src="images/sc_logo.png"/></a>
+      <a href="http://media.mit.edu" target="_blank"><img height="150px" src="images/ml_logo.png"/></a>
+      <a href="http://www.mit.edu" target="_blank"><img height="150px" src="images/mit_logo.png"/></a>
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="container-fluid viz-window read-desktop">
+  <div class="row instruction-row">
+    <div class="col-md-12">
+      Please click a country to explore, or two to compare.
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div id="map" class="svg-container no-touch" touch-action="none"></div>
+      <div id="radar" class="svg-container"></div>
+      <div class="controls">
+    <button id="zoom_in" class="button" title="Zoom In">&#10133;</button>
+    <button id="zoom_out" class="button" title="Zoom Out">&#10134;</button>
+    <button id="zoom_reset" class="button" title="Reset Map">&#10060;</button>
+    </div>
+    </div>
+  </div>
+  <div class="row instruction-row">
+    <div class="col-md-12" align="right">
+      The gray area is the world average.
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-8 col-xs-12" id="relAB">
+      <div class="short-div col-xs-12" id="relA">
+      </div>
+      <div class="short-div col-xs-12" id="relB">
+      </div>
+    </div>
+    <div class="col-md-4 col-xs-12" id="compAB">
+    </div>
+  </div>
+  <div class="row">&nbsp;</div>
+  <div class="container-fluid"><div class="row">
+  <div class="row rank-label-row" id="rankLabels">
+    <div class="col-md-3 rank-table-label" id="rankTableLabel">
+    </div>
+    <div class="col-md-1 rank-label" id="rankL1">
+      Preferring Inaction
+    </div>
+    <div class="col-md-1 rank-label" id="rankL2">
+      Sparing Pedestrians
+    </div>
+    <div class="col-md-1 rank-label" id="rankL3">
+      Sparing Females
+    </div>
+    <div class="col-md-1 rank-label" id="rankL4">
+      Sparing the Fit
+    </div>
+    <div class="col-md-1 rank-label" id="rankL5">
+      Sparing the Lawful
+    </div>
+    <div class="col-md-1 rank-label" id="rankL6">
+      Sparing Higher Status
+    </div>
+    <div class="col-md-1 rank-label" id="rankL7">
+      Sparing the Younger
+    </div>
+    <div class="col-md-1 rank-label" id="rankL8">
+      Sparing More
+    </div>
+    <div class="col-md-1 rank-label" id="rankL9">
+      Sparing Humans
+    </div>
+  </div>
+  <div class="row rank-a-row" id="rankA">
+    <div class="col-md-3 rank-a-name" id="rankAName">
+    </div>
+    <div class="col-md-1 rank-a-label" id="rankA0">
+    </div>
+    <div class="col-md-1 rank-a-label" id="rankA1">
+    </div>
+    <div class="col-md-1 rank-a-label" id="rankA2">
+    </div>
+    <div class="col-md-1 rank-a-label" id="rankA3">
+    </div>
+    <div class="col-md-1 rank-a-label" id="rankA4">
+    </div>
+    <div class="col-md-1 rank-a-label" id="rankA5">
+    </div>
+    <div class="col-md-1 rank-a-label" id="rankA6">
+    </div>
+    <div class="col-md-1 rank-a-label" id="rankA7">
+    </div>
+    <div class="col-md-1 rank-a-label" id="rankA8">
+    </div>
+  </div>
+  <div class="row rank-b-row" id="rankB">
+    <div class="col-md-3 rank-b-name" id="rankBName">
+    </div>
+    <div class="col-md-1 rank-b-label" id="rankB0">
+    </div>
+    <div class="col-md-1 rank-b-label" id="rankB1">
+    </div>
+    <div class="col-md-1 rank-b-label" id="rankB2">
+    </div>
+    <div class="col-md-1 rank-b-label" id="rankB3">
+    </div>
+    <div class="col-md-1 rank-b-label" id="rankB4">
+    </div>
+    <div class="col-md-1 rank-b-label" id="rankB5">
+    </div>
+    <div class="col-md-1 rank-b-label" id="rankB6">
+    </div>
+    <div class="col-md-1 rank-b-label" id="rankB7">
+    </div>
+    <div class="col-md-1 rank-b-label" id="rankB8">
+    </div>
+  </div>
+</div>
+  <div class="row">
+    <div class="col-md-12" align="center">
+      <a href="http://moralmachine.mit.edu" target="_blank"><img src="images/logo_dark_vertical.png" height="150px" border="0"/></a>
+      <a href="http://scalable.media.mit.edu" target="_blank"><img height="150px" src="images/sc_logo.png" border="0"/></a>
+      <a href="http://media.mit.edu" target="_blank"><img height="150px" src="images/ml_logo.png" border="0"/></a>
+      <a href="http://www.mit.edu" target="_blank"><img height="150px" src="images/mit_logo.png" border="0"/></a>
+    </div>
+  </div>
+
+</div>
+  <script src="js/viz-results.js"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-79525689-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-79525689-1');
+</script>
+
+</body>
+</html>
